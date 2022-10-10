@@ -26,7 +26,7 @@ Path(output).mkdir(exist_ok=True)
 # open web browser (Google Chrome)
 def open_new_browser() -> webdriver.Chrome:
     service = Service(executable_path=ChromeDriverManager().install())
-    browser_options = webdriver.ChromeOptions()
+    # browser_options = webdriver.ChromeOptions()
     # browser_options.add_argument('--headless')
     browser = webdriver.Chrome(service=service)
     return browser
@@ -62,11 +62,6 @@ def get_transcript_urls(driver: webdriver.Chrome,
         url_list.append(url_to_transcript_text)
 
     return url_list
-
-
-# TODO: create an index file and update the index file to avoid duplicate downloads
-def update_url_index():
-    pass
 
 
 def get_transcript_html(transcript_url_address: str, driver: webdriver.Chrome) -> BeautifulSoup:
