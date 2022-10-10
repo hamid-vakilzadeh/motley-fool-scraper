@@ -25,7 +25,7 @@ def open_new_browser():
 
 
 # create a list of transcript urls from the Earnings Call Transcript Page.
-def get_article_urls(web_page_address: str, driver: webdriver.Chrome) -> list[str]:
+def get_transcript_urls(web_page_address: str, driver: webdriver.Chrome) -> list[str]:
     """
     create a list of transcript URL addresses.
     :param driver: webdriver to be used (e.g., Chrome)
@@ -46,7 +46,7 @@ def get_article_urls(web_page_address: str, driver: webdriver.Chrome) -> list[st
     return url_list
 
 
-def get_transcript_html(transcript_url_address: str, driver: webdriver.Chrome) -> str:
+def get_transcript_html(transcript_url_address: str, driver: webdriver.Chrome) -> BeautifulSoup:
     """
     get the transcript of earnings announcement and remove in-text advertisements.
 
@@ -54,24 +54,34 @@ def get_transcript_html(transcript_url_address: str, driver: webdriver.Chrome) -
     :param transcript_url_address: the url address to any transcript on https://www.fool.com/
     :return: transcript text with html markup.
     """
-    my_browser.get(transcript_urls[0])
-    ea_title = my_browser.find_element(by=By.CLASS_NAME, value="text-h3").text
-    ea_html = my_browser.find_element(by=By.CLASS_NAME, value="tailwind-article-body").get_attribute('innerHTML')
+
+    # open page and extract the transcript part
+    driver.get(transcript_url_address)
+    # ea_title = driver.find_element(by=By.CLASS_NAME, value="text-h3").text
+    ea_html = driver.find_element(by=By.CLASS_NAME, value="tailwind-article-body").get_attribute('innerHTML')
+
+    # remove ads and pitches (company advertisements)
     soup = BeautifulSoup(ea_html, 'html.parser')
-    soup.find(name='div', attrs={'id': 'pitch'}).decompose()
-    for item in soup.find_all(attrs={'class': 'interad'}):
-        print(item)
+    ads = soup.find_all(attrs={'id': 'pitch'})
+    ads += soup.find_all(attrs={'class': 'interad'})
+    for item in ads:
         item.decompose()
+
+    return soup
 
 
 if __name__ == '__main__':
     my_browser = open_new_browser()
     # navigate to fool.com earnings pages
     my_browser.get("https://www.fool.com/earnings-call-transcripts")
-    transcript_urls = get_article_urls(web_page_address='https://www.fool.com/earnings-call-transcripts',
-                                       driver=my_browser)
+    transcript_urls = get_transcript_urls(web_page_address='https://www.fool.com/earnings-call-transcripts',
+                                          driver=my_browser)
 
+    # open each transcript page and save it in a file.
+    for url in transcript_urls:
+        file_name = url.split("/")[-2]
+        url_html_text = get_transcript_html(url, driver=my_browser)
 
-    # save the transcript in a file
-    with open('ea_html_for_IDT.txt', mode='w') as file:
-        file.write(ea_html)
+        # save the transcript in a file
+        with open(f'{file_name}.txt', mode='w') as file:
+            file.write(str(url_html_text))
