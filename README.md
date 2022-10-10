@@ -5,7 +5,7 @@ from [fool.com](https://www.fool.com/earnings-call-transcripts/) (only page 1).
 # Disclaimer
 **_DO NOT ABUSE THIS SCRAPER._**
 
-This scraper was developed for educational purposes only and has limited applications.
+This scraper was developed for educational purposes only and serves no other purposes.
 The Motley Fool Terms of Use prohibits scraping and I make no representation that your account won't be banned if you 
 use this program. Furthermore, should I be contacted by The Motley Fool with a request to remove this repo, 
 I will do so immediately.
