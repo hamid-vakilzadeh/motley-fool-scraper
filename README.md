@@ -1,6 +1,7 @@
 # Motley-Fool-Scraper
 This is a simple educational scraper for collecting Earnings Announcement Transcripts 
 from [fool.com](https://www.fool.com/earnings-call-transcripts/) (only page 1).
+
 This package was developed for the purpose of Web Scraping with Python Workshop at Florida Atlantic University - October 2022.
 
 # Disclaimer
